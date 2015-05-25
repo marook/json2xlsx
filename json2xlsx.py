@@ -33,23 +33,34 @@ class ObjectToRow(object):
         # value: column index
         self.property_columns = {}
 
-    def build_columns(self, obj):
-        for property_key in obj.iterkeys():
-            if(property_key in self.property_columns):
-                continue
+    def build_columns(self, obj, prefix=None):
+        for property_key, property_value in obj.iteritems():
+            column_key = property_key if prefix is None else '%s.%s' % (prefix, property_key)
+            
+            if(isinstance(property_value, dict)):
+                self.build_columns(property_value, prefix=column_key)
+            else:
+                if(column_key in self.property_columns):
+                    continue
 
-            self.property_columns[property_key] = len(self.property_columns)
+                self.property_columns[column_key] = len(self.property_columns)
 
     def get_header_row(self):
         return [property_key for property_key, property_index in sorted(self.property_columns.iteritems(), key=lambda i: i[1])]
 
-    def convert(self, obj):
-        row = [None,] * len(self.property_columns)
-
+    def convert(self, obj, prefix=None, row=None):
+        if(row is None):
+            row = [None,] * len(self.property_columns)
+        
         for property_key, property_value in obj.iteritems():
-            property_index = self.property_columns[property_key]
+            column_key = property_key if prefix is None else '%s.%s' % (prefix, property_key)
 
-            row[property_index] = unicode(property_value)
+            if(isinstance(property_value, dict)):
+                self.convert(property_value, prefix=column_key, row=row)
+            else:
+                property_index = self.property_columns[column_key]
+
+                row[property_index] = property_value
 
         return row
 
