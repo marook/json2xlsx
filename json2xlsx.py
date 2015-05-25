@@ -13,7 +13,7 @@ def main(json_path, xlsx_path):
         o2r.build_columns(json_object)
 
     workbook = openpyxl.Workbook()
-    worksheet = workbook.create_sheet(0)
+    worksheet = workbook.get_sheet_by_name(workbook.get_sheet_names()[0])
 
     worksheet.append(o2r.get_header_row())
 
