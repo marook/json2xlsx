@@ -1,0 +1,62 @@
+json2xlsx - converts JSON to Open XML spreadsheets
+
+
+1) Introduction
+2) Installation
+3) Usage
+4) License
+
+
+------------------------------------------------------------------------
+Introduction
+
+Converts JSON arrays which contain JSON objects into a Open XML
+spreadsheet. Nested objects are mapped into multiple columns.
+
+Example JSON:
+
+[
+  {
+    key1: 42,
+    key2: {
+      value1: 'x',
+      value2: 'y'
+    }
+  }
+]
+
+converts to:
+
+| key1 | key2.value1 | key2.value2 |
+|------|-------------|-------------|
+| 42   | x           | y           |
+
+
+------------------------------------------------------------------------
+Installation
+
+You need to install Openpyxl. Choose one of the following:
+
+$ aptitude install python-openpyxl
+
+or
+
+$ pip install openpyxl
+
+or
+
+$ easy_install openpyxl
+
+
+------------------------------------------------------------------------
+Usage
+
+$ python json2xlsx.py <input JSON path> <output XLSX path>
+
+The output file will be overwritten if already existing.
+
+
+------------------------------------------------------------------------
+License
+
+See file COPYING for details.
